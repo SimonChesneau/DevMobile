@@ -38,7 +38,8 @@ add_library(${CMAKE_PROJECT_NAME} SHARED
         Native_Camera.cpp
         Image_Reader.cpp
         Socket_client.cpp
-        Encoder.cpp)
+        Encoder.cpp
+        Microphone_Reader.cpp)
 
 # Specifies libraries CMake should link to your target library. You
 # can link libraries from various origins, such as libraries defined in this

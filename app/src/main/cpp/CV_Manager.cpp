@@ -238,6 +238,10 @@ void CV_Manager::SetUpSocket(){
     LOGI("Socket conected");
 }
 
+void CV_Manager::SetUpMicrophone() {
+
+}
+
 /*void CV_Manager::SetUpSocketWebRTC(){
     //int port = 5555;
     int port = 5005;

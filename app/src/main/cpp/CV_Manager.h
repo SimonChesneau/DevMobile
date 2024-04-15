@@ -43,8 +43,10 @@ public:
     void FlipCamera();
     void PauseCamera();
     void SetUpSocket();
-    void SetUpSocketWebRTC();
+    //void SetUpSocketWebRTC();
     void SetUpEncoder();
+    void SetUpMicrophone();
+
 
 private:
 
