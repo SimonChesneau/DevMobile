@@ -39,13 +39,16 @@ public:
     void SetUpCamera();
     void CameraLoop();
     void BarcodeDetect(Mat &frame);
+    void FaceDetection(Mat &frame);
     void ReleaseMats();
     void FlipCamera();
     void PauseCamera();
     void SetUpSocket();
     //void SetUpSocketWebRTC();
     void SetUpEncoder();
-    void SetUpMicrophone();
+    //void SetUpMicrophone();
+    void initFilePath(String FilePath);
+    void loadCascadeFromAssets(const char* filename);
 
 
 private:
@@ -58,7 +61,6 @@ private:
 
     // Camera variables
     Native_Camera *m_native_camera;
-
     camera_type m_selected_camera_type = BACK_CAMERA; // Default
 
     // Image Reader
@@ -93,6 +95,8 @@ private:
     Scalar CV_RED = Scalar(255, 0, 0);
     Scalar CV_GREEN = Scalar(0, 255, 0);
     Scalar CV_BLUE = Scalar(0, 0, 255);
+
+    String AbsoluteFilePath;
 
     bool m_camera_thread_stopped = false;
 };

@@ -26,8 +26,6 @@ project("mathias")
 # used in the AndroidManifest.xml file.
 
 
-#include_directories(${CMAKE_SOURCE_DIR}/webrtc)
-
 set(OpenCV_DIR C:/Users/Simon/AndroidStudioProjects/OpenCV/sdk/native/jni)
 
 find_package(OpenCV REQUIRED)
@@ -39,7 +37,7 @@ add_library(${CMAKE_PROJECT_NAME} SHARED
         Image_Reader.cpp
         Socket_client.cpp
         Encoder.cpp
-        Microphone_Reader.cpp)
+        )
 
 # Specifies libraries CMake should link to your target library. You
 # can link libraries from various origins, such as libraries defined in this
@@ -51,4 +49,7 @@ target_link_libraries(${CMAKE_PROJECT_NAME}
         log
         ${log-lib}
         camera2ndk
+        OpenSLES
         )
+
+

@@ -3,6 +3,8 @@
 //
 
 #include <opencv2/imgproc/types_c.h>
+#include <opencv2/opencv.hpp>
+#include <android/asset_manager.h>
 #include "CV_Manager.h"
 #include "Encoder.h"
 
@@ -106,6 +108,10 @@ void CV_Manager::CameraLoop() {
         }
         m_image_reader->DisplayImage(&buffer, m_image);
         display_mat = cv::Mat(buffer.height, buffer.stride, CV_8UC4, buffer.bits);
+
+        //BarcodeDetect(display_mat);
+        //FaceDetection(display_mat);
+
         ANativeWindow_unlockAndPost(m_native_window);
         ANativeWindow_release(m_native_window);
 
@@ -181,6 +187,83 @@ void CV_Manager::BarcodeDetect(Mat &frame) {
     drawContours(frame, contours, int(contours.size()-1), CV_GREEN, 2, LINE_8, hierarchy, 0, Point());
 }
 
+void CV_Manager::initFilePath(String FilePath) {
+    AbsoluteFilePath = FilePath;
+}
+
+void CV_Manager::FaceDetection(Mat &frame ) {
+    vector<Rect> faces, faces2;
+    Mat gray, smallImg;
+
+    CascadeClassifier cascade;
+    double scale=1;
+
+    //string test = AbsoluteFilePath;
+
+    LOGI("%s/input/haarcascade_frontalface_default.xml", AbsoluteFilePath.c_str());
+    cascade.load( (AbsoluteFilePath + "/input/haarcascade_frontalface_default.xml").c_str() ) ;
+    //getAssetPath();
+
+    //loadCascadeFromAssets("input/haarcascade_frontalface_default.xml");
+
+    /*nestedCascade.load( "../../haarcascade_eye_tree_eyeglasses.xml" ) ;*/
+
+    cvtColor( frame, gray, COLOR_BGR2GRAY ); // Convert to Gray Scale
+    double fx = 1 / scale;
+
+    // Resize the Grayscale Image
+    resize( gray, smallImg, Size(), fx, fx, INTER_LINEAR );
+    equalizeHist( smallImg, smallImg );
+
+    // Detect faces of different sizes using cascade classifier
+    cascade.detectMultiScale( smallImg, faces, 1.1,
+                              2, 0|CASCADE_SCALE_IMAGE, Size(30, 30) );
+
+    // Draw circles around the faces
+    for ( size_t i = 0; i < faces.size(); i++ )
+    {
+        Rect r = faces[i];
+        Mat smallImgROI;
+        vector<Rect> nestedObjects;
+        Point center;
+        Scalar color = Scalar(255, 0, 0); // Color for Drawing tool
+        int radius;
+
+        double aspect_ratio = (double)r.width/r.height;
+        if( 0.75 < aspect_ratio && aspect_ratio < 1.3 )
+        {
+            center.x = cvRound((r.x + r.width*0.5)*scale);
+            center.y = cvRound((r.y + r.height*0.5)*scale);
+            radius = cvRound((r.width + r.height)*0.25*scale);
+            circle( frame, center, radius, color, 3, 8, 0 );
+        }
+        else
+            rectangle( frame, cvPoint(cvRound(r.x*scale), cvRound(r.y*scale)),
+                       cvPoint(cvRound((r.x + r.width-1)*scale),
+                               cvRound((r.y + r.height-1)*scale)), color, 3, 8, 0);
+        //if( nestedCascade.empty() )
+        //    continue;
+        smallImgROI = smallImg( r );
+
+        // Detection of eyes in the input image
+        /*nestedCascade.detectMultiScale( smallImgROI, nestedObjects, 1.1, 2,
+                                        0|CASCADE_SCALE_IMAGE, Size(30, 30) );*/
+
+        // Draw circles around eyes
+        for ( size_t j = 0; j < nestedObjects.size(); j++ )
+        {
+            Rect nr = nestedObjects[j];
+            center.x = cvRound((r.x + nr.x + nr.width*0.5)*scale);
+            center.y = cvRound((r.y + nr.y + nr.height*0.5)*scale);
+            radius = cvRound((nr.width + nr.height)*0.25*scale);
+            circle( frame, center, radius, color, 3, 8, 0 );
+        }
+    }
+
+    // Show Processed Image with detected faces
+    imshow( "Face Detection", frame );
+}
+
 void CV_Manager::ReleaseMats() {
     display_mat.release();
     frame_gray.release();
@@ -231,15 +314,11 @@ void CV_Manager::PauseCamera() {
 void CV_Manager::SetUpSocket(){
     //int port = 5555;
     int port = 5005;
-    const char hostname[] = "172.16.227.15";
+    const char hostname[] = "192.168.1.19";
     //const char hostname[] = "192.168.154.40";
     m_socket = new SocketClient(hostname, port);
     m_socket->ConnectToServer();
     LOGI("Socket conected");
-}
-
-void CV_Manager::SetUpMicrophone() {
-
 }
 
 /*void CV_Manager::SetUpSocketWebRTC(){
@@ -256,12 +335,20 @@ void CV_Manager::SetUpEncoder()
 {
 
     //setEncoder(encoder)
-    m_Encode = new Encoder();
-    m_Encode->setSocketClientH264(m_socket);
+    media_status_t test;
+    do {
+        m_Encode = new Encoder();
+        m_Encode->setSocketClientH264(m_socket);
 
-    //Calcul bitrate = weight*height*fps (optimal)
-    m_Encode->InitCodec(800, 608, 15, 20000); //480, 640, 15, 100000
-    media_status_t test = m_Encode->getStatus();
+        //Calcul bitrate = weight*height*fps (optimal)
+
+        int32_t width;
+        int32_t height;
+        m_image_reader->getWidth(&width);
+        m_image_reader->getHeight(&height);
+        m_Encode->InitCodec(height, 608, 15, 20000); //480, 640, 15, 100000
+        test = m_Encode->getStatus();
+    }while(test != AMEDIA_OK);
     if (m_Encode->getStatus() != AMEDIA_OK){
         __android_log_print(ANDROID_LOG_ERROR, "CameraNDK", "Failed to create ancoder");
         //std::cout <<" CameraNDK", Failed to create ancoder" << std::endl

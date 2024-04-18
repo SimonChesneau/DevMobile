@@ -357,6 +357,11 @@ void Encoder::Encode (unsigned char *YUV_NV12, int planeSize)
             //On essaie de copier plus de donénes que le buffer ne peux en acceuillir
 
             // ici, nous copions réellement les données image dans le buffer.
+
+            /*while(mYSize > size){
+                mYSize-=1000;
+            }*/
+
             memcpy(bufferPointer, YUV_NV12, mYSize);
             /**
             * etape 3 : envoyer le buffer au codec

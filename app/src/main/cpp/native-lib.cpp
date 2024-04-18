@@ -14,7 +14,6 @@ Java_com_example_mathias_MainActivity_setSurface(JNIEnv *env, jobject thiz, jobj
     // TODO: implements setSurface()
     app.SetNativeWindow(ANativeWindow_fromSurface(env,surface));
     app.SetUpCamera();
-    app.SetUpMicrophone();
     app.SetUpSocket();
     //app.SetUpSocketWebRTC();
     app.SetUpEncoder();
@@ -37,4 +36,12 @@ extern "C"
 JNIEXPORT void JNICALL
 Java_com_example_mathias_MainActivity_flipCamera(JNIEnv *env, jobject thiz, jobject surface) {
     app.PauseCamera();
+}
+extern "C"
+JNIEXPORT void JNICALL
+Java_com_example_mathias_MainActivity_initNativeCode(JNIEnv *env, jobject thiz, jstring file_path) {
+    const char *path = env->GetStringUTFChars(file_path, nullptr);
+    app.initFilePath(path);
+
+    env->ReleaseStringUTFChars(file_path, path);
 }

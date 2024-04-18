@@ -33,12 +33,16 @@ public class MainActivity extends AppCompatActivity {
     Button mButtonFlipCamera;
     SurfaceHolder mSurfaceHolder;
 
+    public native void initNativeCode(String filePath);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+
+        String filesDir = getFilesDir().getAbsolutePath();
+        initNativeCode(filesDir);
 
         mSurfaceView = (SurfaceView)findViewById(R.id.texturePreview);
         mSurfaceHolder = mSurfaceView.getHolder();
