@@ -126,11 +126,12 @@ void CV_Manager::CameraLoop() {
             AImage_getWidth(m_image,ptrCols);
             AImage_getHeight(m_image,ptrRows);
 
+            do {
+                m_Encode->InitCodec(display_mat.rows, display_mat.cols, 15,
+                                    20000); //480, 640, 15, 100000
 
-            //m_socket->SendImageDims(display_mat.cols ,display_mat.rows);
+            }while(m_Encode->getStatus() != AMEDIA_OK);
         }
-
-
         BGR2YUV_nv12(display_mat, outputMat);
         int yPlaneSize = outputMat.total()*outputMat.elemSize();
         m_Encode->Encode(outputMat.data, yPlaneSize);
@@ -341,12 +342,7 @@ void CV_Manager::SetUpEncoder()
         m_Encode->setSocketClientH264(m_socket);
 
         //Calcul bitrate = weight*height*fps (optimal)
-
-        int32_t width;
-        int32_t height;
-        m_image_reader->getWidth(&width);
-        m_image_reader->getHeight(&height);
-        m_Encode->InitCodec(height, 608, 15, 20000); //480, 640, 15, 100000
+        m_Encode->InitCodec(400, 608, 15, 20000); //480, 640, 15, 100000
         test = m_Encode->getStatus();
     }while(test != AMEDIA_OK);
     if (m_Encode->getStatus() != AMEDIA_OK){
