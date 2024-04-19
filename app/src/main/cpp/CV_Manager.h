@@ -12,6 +12,7 @@
 // OpenCV
 #include <opencv2/core.hpp>
 #include <opencv2/imgproc.hpp>
+#include <opencv2/opencv.hpp>
 // OpenCV-NDK App
 #include "Image_Reader.h"
 #include "Native_Camera.h"
@@ -19,6 +20,8 @@
 #include "Socket_Client_WebRTC.h"
 #include "Util.h"
 #include "Encoder.h"
+#include <android/asset_manager.h>
+#include <android/asset_manager_jni.h>
 // STD Libs
 #include <cstdlib>
 #include <string>
@@ -40,6 +43,7 @@ public:
     void CameraLoop();
     void BarcodeDetect(Mat &frame);
     void FaceDetection(Mat &frame);
+    void FaceDetection2(Mat &frame);
     void ReleaseMats();
     void FlipCamera();
     void PauseCamera();
@@ -48,10 +52,16 @@ public:
     void SetUpEncoder();
     //void SetUpMicrophone();
     void initFilePath(String FilePath);
-    void loadCascadeFromAssets(const char* filename);
+    void initAssetManager(AAssetManager* mgr);
+
+    void SetUpFaceDetectionAI();
+
 
 
 private:
+
+    int m_retrievedImageWidth;
+    int m_retrievedImageHeight;
 
     // holds native window to write buffer too
     ANativeWindow *m_native_window;
@@ -96,8 +106,16 @@ private:
     Scalar CV_GREEN = Scalar(0, 255, 0);
     Scalar CV_BLUE = Scalar(0, 0, 255);
 
-    String AbsoluteFilePath;
+        String AbsoluteFilePath;
+        AAssetManager* m_AssetManager;
 
     bool m_camera_thread_stopped = false;
+
+
+
+    //Face detection https://medium.com/analytics-vidhya/building-a-face-detector-with-opencv-in-c-8814cd374ea1
+    std::vector<cv::Rect> detect_face_rectangles(const cv::Mat &frame);
+    /// Face detection network
+    cv::dnn::Net m_network;
 };
 #endif MATHIAS_CV_MANAGER_H

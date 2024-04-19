@@ -2,6 +2,8 @@
 #include <string>
 #include "android/native_window_jni.h"
 #include "android/asset_manager_jni.h"
+#include <android/asset_manager.h>
+#include <android/asset_manager_jni.h>
 
 #include "CV_Manager.h"
 #include "Socket_client.h"
@@ -39,9 +41,12 @@ Java_com_example_mathias_MainActivity_flipCamera(JNIEnv *env, jobject thiz, jobj
 }
 extern "C"
 JNIEXPORT void JNICALL
-Java_com_example_mathias_MainActivity_initNativeCode(JNIEnv *env, jobject thiz, jstring file_path) {
+Java_com_example_mathias_MainActivity_initNativeCode(JNIEnv *env, jobject thiz, jstring file_path, jobject assetManager) {
     const char *path = env->GetStringUTFChars(file_path, nullptr);
     app.initFilePath(path);
 
     env->ReleaseStringUTFChars(file_path, path);
+
+    AAssetManager* mgr = AAssetManager_fromJava(env, assetManager);
+    app.initAssetManager(mgr);
 }

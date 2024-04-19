@@ -5,8 +5,11 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
 import android.content.pm.PackageManager;
+import android.content.res.AssetManager;
 import android.os.Bundle;
+import android.os.Environment;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.Surface;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
@@ -18,6 +21,12 @@ import android.widget.Toast;
 import android.Manifest;
 
 import com.example.mathias.databinding.ActivityMainBinding;
+
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -33,7 +42,7 @@ public class MainActivity extends AppCompatActivity {
     Button mButtonFlipCamera;
     SurfaceHolder mSurfaceHolder;
 
-    public native void initNativeCode(String filePath);
+    public native void initNativeCode(String filePath, AssetManager assetManager);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,7 +51,18 @@ public class MainActivity extends AppCompatActivity {
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 
         String filesDir = getFilesDir().getAbsolutePath();
-        initNativeCode(filesDir);
+        AssetManager assetManager = getAssets();
+        try {
+            InputStream in = assetManager.open("haarcascade_frontalface_default.xml");
+            File outFile = new File(getApplicationContext().getFilesDir(), "haarcascade_frontalface_default.xml");
+            OutputStream out = new FileOutputStream(outFile);
+            copyFile(in, out);
+            out.flush();
+        } catch (Exception e) {
+            int t=0;
+        }
+
+        initNativeCode(filesDir, assetManager);
 
         mSurfaceView = (SurfaceView)findViewById(R.id.texturePreview);
         mSurfaceHolder = mSurfaceView.getHolder();
@@ -84,6 +104,14 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+    }
+
+    private void copyFile(InputStream in, OutputStream out) throws IOException {
+        byte[] buffer = new byte[1];
+        int read;
+        while((read = in.read(buffer)) != -1){
+            out.write(buffer, 0, read);
+        }
     }
 
     private void requestCameraPermission() {
