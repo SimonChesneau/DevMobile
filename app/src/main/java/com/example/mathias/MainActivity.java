@@ -16,6 +16,7 @@ import android.view.SurfaceView;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.Manifest;
@@ -41,6 +42,8 @@ public class MainActivity extends AppCompatActivity {
     SurfaceView mSurfaceView;
     Button mButtonFlipCamera;
     SurfaceHolder mSurfaceHolder;
+    Switch mFaceDetectionAI;
+    Switch mFaceDetectionCV;
 
     public native void initNativeCode(String filePath, AssetManager assetManager);
 
@@ -68,6 +71,8 @@ public class MainActivity extends AppCompatActivity {
         mSurfaceHolder = mSurfaceView.getHolder();
 
         mButtonFlipCamera = (Button)findViewById(R.id.FlipCamera);
+        mFaceDetectionAI = (Switch)findViewById(R.id.FaceDetectionAI);
+        mFaceDetectionCV = (Switch)findViewById(R.id.FaceDetectionCV);
 
         mSurfaceHolder.addCallback(new SurfaceHolder.Callback() {
             @Override
@@ -101,6 +106,20 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 flipCamera(mSurfaceHolder.getSurface());
+            }
+        });
+
+        mFaceDetectionCV.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View view) {
+                faceDetectionCV();
+            }
+        });
+
+        mFaceDetectionAI.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View view) {
+                faceDetectionAI();
             }
         });
 
@@ -142,6 +161,8 @@ public class MainActivity extends AppCompatActivity {
     public native void setSurface(Surface surface);
 
     public native void flipCamera(Surface surface);
+    public native void faceDetectionCV();
+    public native void faceDetectionAI();
     // Release native resources
     public native void releaseCVMain();
 }

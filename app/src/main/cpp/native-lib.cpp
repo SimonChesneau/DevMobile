@@ -49,3 +49,13 @@ Java_com_example_mathias_MainActivity_initNativeCode(JNIEnv *env, jobject thiz, 
     AAssetManager* mgr = AAssetManager_fromJava(env, assetManager);
     app.initAssetManager(mgr);
 }
+extern "C"
+JNIEXPORT void JNICALL
+Java_com_example_mathias_MainActivity_faceDetectionCV(JNIEnv *env, jobject thiz) {
+    app.switchCVFaceDetection();
+}
+extern "C"
+JNIEXPORT void JNICALL
+Java_com_example_mathias_MainActivity_faceDetectionAI(JNIEnv *env, jobject thiz) {
+    app.switchAIFaceDetection();
+}

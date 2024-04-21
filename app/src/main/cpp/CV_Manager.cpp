@@ -113,7 +113,11 @@ void CV_Manager::CameraLoop() {
         display_mat = cv::Mat(buffer.height, buffer.stride, CV_8UC4, buffer.bits);
 
         //BarcodeDetect(display_mat);
-        FaceDetection(display_mat);
+        if(m_useCVFaceDetection)
+            CVFaceDetection(display_mat);
+        if(m_useAIFaceDetection)
+            AIFaceDetection(display_mat);
+
         CameraLayer(display_mat);
 
         ANativeWindow_unlockAndPost(m_native_window);
@@ -203,7 +207,7 @@ void CV_Manager::initAssetManager(AAssetManager* mgr){
     m_AssetManager = mgr;
 };
 
-void CV_Manager::FaceDetection(Mat &frame ) {
+void CV_Manager::CVFaceDetection(Mat &frame ) {
     vector<Rect> faces, faces2;
     Mat gray, smallImg;
 
@@ -316,7 +320,7 @@ void CV_Manager::SetUpFaceDetectionAI(){
     }
 }
 
-void CV_Manager::FaceDetection2(Mat &frame ) {
+void CV_Manager::AIFaceDetection(Mat &frame ) {
     const float confidence_threshold_ = 0.85;
     const int input_image_height_ = frame.rows;
     const int input_image_width_ = frame.cols;
@@ -470,7 +474,7 @@ void CV_Manager::PauseCamera() {
 void CV_Manager::SetUpSocket(){
     //int port = 5555;
     int port = 5005;
-    const char hostname[] = "192.168.1.19";
+    const char hostname[] = "192.168.171.39";
     //const char hostname[] = "192.168.154.40";
     m_socket = new SocketClient(hostname, port);
     m_socket->ConnectToServer();

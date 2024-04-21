@@ -42,8 +42,8 @@ public:
     void SetUpCamera();
     void CameraLoop();
     void BarcodeDetect(Mat &frame);
-    void FaceDetection(Mat &frame);
-    void FaceDetection2(Mat &frame);
+    void CVFaceDetection(Mat &frame);
+    void AIFaceDetection(Mat &frame);
     void CameraLayer(Mat &frame);
     void ReleaseMats();
     void FlipCamera();
@@ -56,6 +56,8 @@ public:
     void initAssetManager(AAssetManager* mgr);
 
     void SetUpFaceDetectionAI();
+    void switchAIFaceDetection(){ m_useAIFaceDetection = !m_useAIFaceDetection;};
+    void switchCVFaceDetection(){ m_useCVFaceDetection = !m_useCVFaceDetection;};
 
 
 
@@ -63,6 +65,9 @@ private:
 
     int m_retrievedImageWidth;
     int m_retrievedImageHeight;
+
+    bool m_useAIFaceDetection=false;
+    bool m_useCVFaceDetection=false;
 
     // holds native window to write buffer too
     ANativeWindow *m_native_window;
