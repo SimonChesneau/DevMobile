@@ -63,6 +63,6 @@ les implémenter toutes les 2 dans la version finale, avec un moyen de les activ
 <p>La détéction de visage via une IA à été la première implémentation à avoir marchée. Cette implémentation, faite via le tutorial présent sur <a href="https://medium.com/analytics-vidhya/building-a-face-detector-with-opencv-in-c-8814cd374ea1">ce lien</a>.</p>
 
 <h4>Implémentation</h4>
-<p>Lors du lancement, il est possible </p>
-
+<p>Lors du lancement, il est possible de séléctionner l'option de détection de visage en utilisant de l'IA:</p>
+![alt text](https://github.com/SimonChesneau/DevMobile/blob/main/435171268_1911860759267412_1220162095142595644_1.jpg.jpg)
 
