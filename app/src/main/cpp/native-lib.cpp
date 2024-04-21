@@ -17,7 +17,6 @@ Java_com_example_mathias_MainActivity_setSurface(JNIEnv *env, jobject thiz, jobj
     app.SetNativeWindow(ANativeWindow_fromSurface(env,surface));
     app.SetUpCamera();
     app.SetUpSocket();
-    //app.SetUpSocketWebRTC();
     app.SetUpEncoder();
 
     std::thread loopthread( &CV_Manager::CameraLoop, &app);

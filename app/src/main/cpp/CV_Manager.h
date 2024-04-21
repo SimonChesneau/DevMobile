@@ -44,6 +44,7 @@ public:
     void BarcodeDetect(Mat &frame);
     void FaceDetection(Mat &frame);
     void FaceDetection2(Mat &frame);
+    void CameraLayer(Mat &frame);
     void ReleaseMats();
     void FlipCamera();
     void PauseCamera();

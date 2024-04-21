@@ -114,6 +114,7 @@ void CV_Manager::CameraLoop() {
 
         //BarcodeDetect(display_mat);
         FaceDetection(display_mat);
+        CameraLayer(display_mat);
 
         ANativeWindow_unlockAndPost(m_native_window);
         ANativeWindow_release(m_native_window);
@@ -280,32 +281,6 @@ void CV_Manager::FaceDetection(Mat &frame ) {
     }
 }
 
-/*cv::dnn::Net readNetFromCaffeWithAssetManager(const std::string& configuration_path, const std::string& weights_path) {
-
-    AAsset* config_asset = AAssetManager_open(m_AssetManager, configuration_path.c_str(), AASSET_MODE_BUFFER);
-    AAsset* weights_asset = AAssetManager_open(m_AssetManager, weights_path.c_str(), AASSET_MODE_BUFFER);
-
-    if (config_asset != nullptr && weights_asset != nullptr) {
-        const void* config_data = AAsset_getBuffer(config_asset);
-        const void* weights_data = AAsset_getBuffer(weights_asset);
-        size_t config_length = AAsset_getLength(config_asset);
-        size_t weights_length = AAsset_getLength(weights_asset);
-
-        cv::Mat config_mat(1, config_length, CV_8UC1, const_cast<void*>(config_data));
-        cv::Mat weights_mat(1, weights_length, CV_8UC1, const_cast<void*>(weights_data));
-
-        cv::dnn::Net network = cv::dnn::readNetFromCaffe(config_mat, weights_mat);
-
-        AAsset_close(config_asset);
-        AAsset_close(weights_asset);
-
-        return network;
-    } else {
-        // Gérer les erreurs d'ouverture de fichier.
-        throw std::runtime_error("Failed to open asset files");
-    }
-}*/
-
 void CV_Manager::SetUpFaceDetectionAI(){
     AAsset* config_asset = AAssetManager_open(m_AssetManager, "deploy.prototxt", AASSET_MODE_BUFFER);
     AAsset* weights_asset = AAssetManager_open(m_AssetManager, "res10_300x300_ssd_iter_140000_fp16.caffemodel", AASSET_MODE_BUFFER);
@@ -398,6 +373,50 @@ void CV_Manager::FaceDetection2(Mat &frame ) {
     for(const auto & r : faces){
         cv::rectangle(frame, r, color, frame_thickness);
     }
+}
+
+void CV_Manager::CameraLayer(Mat &frame){
+    const int width = m_view.width;
+    const int height = m_view.height;
+
+    //En haut a gauche
+    cv::Point start_point(10, 10);
+    cv::Point end_point(60, 10);
+    cv::line(frame, start_point, end_point, cv::Scalar(255, 255, 255), 10);
+
+    cv::Point start_point2(10, 10);
+    cv::Point end_point2(10, 60);
+    cv::line(frame, start_point2, end_point2, cv::Scalar(255, 255, 255), 10);
+
+    //En bas a gauche
+    cv::Point start_point3(10, height-10);
+    cv::Point end_point3(60, height-10);
+    cv::line(frame, start_point3, end_point3, cv::Scalar(255, 255, 255), 10);
+
+    cv::Point start_point4(10, height-10);
+    cv::Point end_point4(10, height-60);
+    cv::line(frame, start_point4, end_point4, cv::Scalar(255, 255, 255), 10);
+
+
+    //En bas a droite
+    cv::Point start_point5(width-10, height-10);
+    cv::Point end_point5(width-60, height-10);
+    cv::line(frame, start_point5, end_point5, cv::Scalar(255, 255, 255), 10);
+
+    cv::Point start_point6(width-10, height-10);
+    cv::Point end_point6(width-10, height-60);
+    cv::line(frame, start_point6, end_point6, cv::Scalar(255, 255, 255), 10);
+
+
+    //En haut a droite
+    cv::Point start_point7(width-10, 10);
+    cv::Point end_point7(width-60, 10);
+    cv::line(frame, start_point7, end_point7, cv::Scalar(255, 255, 255), 10);
+
+    cv::Point start_point8(width-10, 10);
+    cv::Point end_point8(width-10, 60);
+    cv::line(frame, start_point8, end_point8, cv::Scalar(255, 255, 255), 10);
+
 }
 
 
