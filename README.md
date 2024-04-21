@@ -59,10 +59,33 @@ la détection de visages via openCV, mais après 2 jours d'essais infructueux, n
 nous avons réussi a implémenter la détéction de visages via openCV. Afin de ne pas gacher ces nombreuses heures a chercher comment implémenter ces détections de visages, nous avons choisis de 
 les implémenter toutes les 2 dans la version finale, avec un moyen de les activer et désactiver.</p>
 
-<h3>Détéction de visage via une IA</h3>
+<h3>Détéction de visages via une IA</h3>
 <p>La détéction de visage via une IA à été la première implémentation à avoir marchée. Cette implémentation, faite via le tutorial présent sur <a href="https://medium.com/analytics-vidhya/building-a-face-detector-with-opencv-in-c-8814cd374ea1">ce lien</a>.</p>
 
 <h4>Implémentation</h4>
 <p>Lors du lancement, il est possible de séléctionner l'option de détection de visage en utilisant de l'IA:</p>
-![alt text](https://github.com/SimonChesneau/DevMobile/blob/main/435171268_1911860759267412_1220162095142595644_1.jpg.jpg)
+![alt text](https://github.com/SimonChesneau/DevMobile/blob/main/435171268_1911860759267412_1220162095142595644_1.jpg)
+<p>En selectionnant cette option, vous permettez que l'image passent par la méthode <code>AIFaceDetection</code> du <code>CV_Manager</code>.
+cette fonction utilisera les fichiers <code>deploy.prototxt</code> et <code>res10_300x300_ssd_iter_140000_fp16.caffemodel</code> présente dans <code>assets</code> afin de pouvoir setup les poids de l'IA dans le but qu'elle puisse détecter les visages.</p>
+
+<h4>Problèmes rencontrés</h4>
+<p>Au cours de cette implémentation, un problème majeur à été rencontrés: queles sont les valeurs des pparamètres a mettre afin que l'IA ne soit pas trop sensible (ne détecte pas trop de visage s'il n'y en a pas), mais qu'elle puisse tous de même détecter un visage. Avec les paramètres actuels, le résultat est satisfaisant, mais nécessite d'être assez loins de la caméra afin qu'elle détecte le visage. Cela est toujours mieux que le premier essai ci-dessous</p>
+![alt text](https://github.com/SimonChesneau/DevMobile/blob/main/436745719_3659529417655995_7414055945407031037_n.jpg)
+
+<h3>Détection de visages via openCV</h3>
+<p>OpenCV est la première méthode que nous avons trouvé et essayer d'implémenter. Malheureusement, elle est aussi la dernière que nous avons réussi a faire fonctionner.</p>
+<h4>Implémentation</h4>
+<p>Lors du lancement, il est possible de séléctionner l'option de détection de visage en utilisant de openCV:</p>
+![alt text](https://github.com/SimonChesneau/DevMobile/blob/main/435171268_1911860759267412_1220162095142595644_n.jpg)
+<p>De la même manière que pour la détection de visage par IA, en séléctionnant cette option, vous permettez que l'image passe par la méthode <code>CVFaceDetection</code> de <code>CV_Manager</code>. Cette fonction utilisera le fichier <code>haarcascade_frontalface_default.xml</code> présent dans <code>assets</code> dans le but dé détecter les visages en utilisant une <code>cascade</code>.</p>
+
+<h4>Problèmes rencontrés</h4>
+<p>La raison pour laquelle nous n'avons pas réussi a utiliser openCV dans un premier temps viens d'un problème très simple: la cascade. En effet, la cascade est l'outil principal permettant de détecter les visages, et pour initialiser cet objet en c++, il faut lui donner un lien en texte danns la méthode <code>load("link")</code>. Malheureusement, openCV n'est pas capable d'aller ouvrir les fichiers. Il est donc presque impossible de faire fonctionner cette méthode.</p>
+<p>A force de recherche, nous avons découvert qu'il était possible de récupéré cet objet via la partie Java du code et de la passer au C++ en usilisant un <code>AssetManager</code>. Nous avons donc créer l'un de ces objets récupérant notre fichier, puis le donnant a notre objet <code>cascade</code> via la fonction <code>read(node)</code>. En utilisant les <code>FileStorage</code> (fs) d'openCV, nous pouvons ouvrir le fichier. Il ne nous reste plus qu'a le transformer en Node en utilisant la méthode <code>root()</code>. Malheureusement, c'est là que nous avons rencontrés notre problème. utiliser <code>cascade.read(fs.root());</code>, n'est pas capable d'initialiser la cascade. Après beaucoup de recherche, nous avons abandonné cette méthode puisque tant que la cascade n'était pas initialiser, nous ne pouvions rien détecter.</p>
+<p>La résolution qui a été trouvé par la suite, à été trouvé par hasard. En effet, en éssayant de revenir au code précédent (supprimé par erreur), nous avons utiliser une autre méthode du <code>FileStorage</code> permettant d'obtenir une <code>Node</code>. Ceci nous a permis d'initialiser la cascade et de détecter les visages. La ligne <code>cascade.read(fs.root());</code> est devenu: <code>cascade.read(fs.getFirstTopLevelNode());</code></p>
+
+<h3>Ajout de petites décoration sur la caméra</h3>
+<p>Dans un but d'essayer de reproduire l'effet de caméra du jeu outlast, nous avons ajouter quelques petits traits sur l'image. Malheureusement, l'implémentation des détection de visages nous ayant pris trop de temps, nous n'avons pas été capable d'aller plus loins que les 4 coins de la caméra.</p>
+
+
 
