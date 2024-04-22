@@ -23,8 +23,10 @@ Lors de l'installation de l'APK sur le téléphone de mathias, un bug jusque là
 </p>
 
 <h3>Résolution</h3>
-<p>Afin de rendre le code plus robuste et consistant, nous avons identifié les endroits sur lesquels cette erreur se produisait.
-Heureusement pour nous, cela ne se produisait que lors de l'initialisation de l'encodeur. Nous avons donc ajouté une boucle initialisant l'encodeur tant que celui-ci n'était pas créé entièrement. </p>
+<p>
+Afin de rendre le code plus robuste et consistant, nous avons identifié les endroits sur lesquels cette erreur se produisait.
+Heureusement pour nous, cela ne se produisait que lors de l'initialisation de l'encodeur. Nous avons donc ajouté une boucle initialisant l'encodeur tant que celui-ci n'était pas créé entièrement. 
+</p>
 <h4>Code précédent</h4>
 
 ```c++
@@ -45,20 +47,29 @@ do {
 }while(test != AMEDIA_OK);    
 ```
 
-<p>De cette manière, le statut de l'encodeur doit forcément être AMEDIA_OK pour pouvoir passer à la suite.</p>
-<p>Cette partie nous a semblé essentiel, malgrés le besoins de cette evaluation, car cela permet a tout portable android de passer cette erreur, et non plus que les plus chanceux.</p>
+<p>
+De cette manière, le statut de l'encodeur doit forcément être <code>AMEDIA_OK</code> pour pouvoir passer à la suite. <br>
+Cette partie nous a semblé essentiel, malgrés le besoins de cette evaluation, car cela permet a tout portable android de passer cette erreur, et non plus que les plus chanceux.
+</p>
 
-<h3>Ajout de la récupération automatique de la taille de l'image dans l'initialisation de l'encodeur</h3>
-<p>Jusqu'ici, nous donnions manuelement les dimensions de l'image à l'encodeur afin qu'il puisse encoder l'encoder. Nous avons décider de rendre cette partie automatique
-pour éviter des erreur de segmentation lors du <code>memcpy</code> effectuer sur les buffers images. </p>
+<h3>Récupération automatique de la taille de l'image à l'initialisation de l'encodeur</h3>
+
+<p>
+Jusqu'ici, nous donnions manuelement les dimensions de l'image à l'encodeur afin qu'il puisse l'encoder. Nous avons décidé de rendre cette partie automatique pour éviter des erreurs de segmentation lors du <code>memcpy</code> effectué sur les buffers d'images. 
+</p>
+
 <h4>Code précédent </h4>
-<p>précédemment nous utilisions le <code>SetUpEncoder</code> pour spécifier les dimensions des images</p>
+<p>Précédemment nous utilisions le <code>SetUpEncoder</code> pour spécifier les dimensions des images</p>
 
->> m_Encode->InitCodec(400, 608, 15, 20000);
+```c++ 
+m_Encode->InitCodec(400, 608, 15, 20000);
+```
 
 <h4>Mis à jours du code pour plus de maléabilité</h4>
-<p>Lors de la récupération des images, nous envoyons les dimanesions au serveur lors du premier envoi.
-C'est a ce moment là que nous initialisons les bonnes dimensions d'image à l'encodeur afin qu'il puisse encoder les images sans créer d'erreurs.</p>
+<p>
+Lors de la récupération des images, nous envoyons les dimanesions au serveur lors du premier envoi.
+C'est a ce moment là que nous initialisons les bonnes dimensions d'image à l'encodeur afin qu'il puisse encoder les images sans créer d'erreurs.
+</p>
 <code>
 do {
 m_Encode->InitCodec(display_mat.rows, display_mat.cols, 15,
