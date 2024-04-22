@@ -1,3 +1,6 @@
+[![Contributors][contributors-shield]][contributors-url]
+[![Forks][forks-shield]][forks-url]
+
 <h1>Mise a jours du code donné:</h1>
 <h2>Renforcement du code</h2>
 <h3>Problème</h3>
@@ -10,14 +13,12 @@ Heureusement pour nous, cela ne se produisait que lors de l'initialisation de l'
 tant que celui-ci n'était pas créer entièrement. </p>
 <h4>Code précédent</h4>
 
-```c
+```c++
 m_Encode = new Encoder();
 m_Encode->setSocketClientH264(m_socket);
 m_Encode->InitCodec(400, 608, 15, 20000);
 test = m_Encode->getStatus();
 ```
-
-</code>
 
 <h4>Code mis à jours pour plus de robustesse</h4>
 <code>
