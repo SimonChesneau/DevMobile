@@ -106,7 +106,7 @@ Les 2 implémentations sont disponibles dans la version finale, avec un moyen de
 
 <h4>Implémentation</h4>
 <p>Lors du lancement, il est possible de séléctionner l'option de détection de visage en utilisant de l'IA:</p>
-![alt text](https://github.com/SimonChesneau/DevMobile/blob/main/435171268_1911860759267412_1220162095142595644_1.jpg)
+![Image IA](IA.jpg)
 <p>En selectionnant cette option, vous permettez que l'image passent par la méthode <code>AIFaceDetection</code> du <code>CV_Manager</code>.
 cette fonction utilisera les fichiers <code>deploy.prototxt</code> et <code>res10_300x300_ssd_iter_140000_fp16.caffemodel</code> présente dans <code>assets</code> afin de pouvoir setup les poids de l'IA dans le but qu'elle puisse détecter les visages.</p>
 
