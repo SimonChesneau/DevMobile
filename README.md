@@ -1,16 +1,30 @@
-[![Contributors][contributors-shield]][contributors-url]
-[![Forks][forks-shield]][forks-url]
+<h1>Compréhension du code donné:</h1>
+<h2>Structure du code :</h2>
+<p>
+Le code s'organise autour de deux parties. Une partie écrite en Java nommée MainActivity permet de gérer le cycle de vie de l'application, les permissions et l'interface utilisateur. Et une partie native codée en C++ permet d'utiliser les composantes natives du téléphone (caméra) et des librairies C++ pour du traitement ou de la communication. Pour communiquer, ces deux parties utilisent une JNI ou Java-Native Interface qui permet de faire communiquer les deux langages.
 
-<h1>Mise a jours du code donné:</h1>
+Le plus gros du code fourni se trouve du côté natif et est structuré comme suit :
+
+1. CV_Manager :
+C'est la classe principale qui compose le code natif. Elle contient des méthodes qui permettent de faire appel aux fonctionnalités des librairies, comme par exemple SetUpCamera(), SetUpEncoder() ou encore CameraLoop().
+
+2. native-lib :
+C'est dans ce fichier que sont définis les appels à la JNI. On définit des fonctions en C++ qui pourront être appelées depuis le code Java. C'est ici que l'on instancie le CV_Manager et que l'on crée le thread pour la CameraLoop().
+
+3. Les librairies :
+Ce sont différents fichiers qui utilisent des librairies externes pour des opérations de traitement. L'encoder, par exemple, permet d'encoder les images enregistrées par la caméra.
+</p>
+
+<h1>Modifications du code donné:</h1>
 <h2>Renforcement du code</h2>
 <h3>Problème</h3>
-<p>Lors de l'installation de l'APK sur le téléphone de mathias, un bug jusque là jamais apparus s'est mis a survenir de manière aléatoire. Après avoir investigué le sujet,
-        nous nous sommes rendu compte que certains téléphone alloue des zone de mémoire normalement interdire, engendrant la non réation d'objets C++ et donc des nullpointers par la
-        suite.</p>
+<p>
+Lors de l'installation de l'APK sur le téléphone de mathias, un bug jusque là jamais apparus s'est mis a survenir de manière aléatoire. Après avoir investigué le sujet, nous nous sommes rendu compte que certains téléphone alloue des zone de mémoire normalement interdite, engendrant la non réation d'objets C++ et donc des nullpointers par la suite.
+</p>
+
 <h3>Résolution</h3>
-<p>Afin de rendre le code plus robuste et consistant, nous avons identifié les endroits sur lesquels cette erreure se produisait.
-Heureusement pour nous, cela ne se produisait que lors de l'initialisation de l'encodeur. Nous avons donc ajot une boucle initialisant l'encodeur 
-tant que celui-ci n'était pas créer entièrement. </p>
+<p>Afin de rendre le code plus robuste et consistant, nous avons identifié les endroits sur lesquels cette erreur se produisait.
+Heureusement pour nous, cela ne se produisait que lors de l'initialisation de l'encodeur. Nous avons donc ajouté une boucle initialisant l'encodeur tant que celui-ci n'était pas créé entièrement. </p>
 <h4>Code précédent</h4>
 
 ```c++
@@ -21,15 +35,14 @@ test = m_Encode->getStatus();
 ```
 
 <h4>Code mis à jours pour plus de robustesse</h4>
-<code>
+```c++
 do {
         m_Encode = new Encoder();
         m_Encode->setSocketClientH264(m_socket);
         m_Encode->InitCodec(400, 608, 15, 20000); //480, 640, 15, 100000
         test = m_Encode->getStatus();
-}while(test != AMEDIA_OK);
-        
-</code>
+}while(test != AMEDIA_OK);    
+```
 <p>De cette manière, le statut de l'encodeur doit forcément être AMEDIA_OK pour pouvoir passer à la suite.</p>
 <p>Cette partie nous a semblé essentiel, malgrés le besoins de cette evaluation, car cela permet a tout portable android de passer cette erreur, et non plus que les plus chanceux.</p>
 
@@ -91,3 +104,4 @@ cette fonction utilisera les fichiers <code>deploy.prototxt</code> et <code>res1
 
 <h3>Ajout de petites décoration sur la caméra</h3>
 <p>Dans un but d'essayer de reproduire l'effet de caméra du jeu outlast, nous avons ajouter quelques petits traits sur l'image. Malheureusement, l'implémentation des détection de visages nous ayant pris trop de temps, nous n'avons pas été capable d'aller plus loins que les 4 coins de la caméra.</p>
+
