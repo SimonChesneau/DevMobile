@@ -5,19 +5,19 @@ Le code s'organise autour de deux parties. Une partie écrite en Java nommée Ma
 
 Le plus gros du code fourni se trouve du côté natif et est structuré comme suit :
 
-1. CV_Manager : <br>
+1. CV_Manager : <br><br>
 C'est la classe principale qui compose le code natif. Elle contient des méthodes qui permettent de faire appel aux fonctionnalités des librairies, comme par exemple SetUpCamera(), SetUpEncoder() ou encore CameraLoop().
 
-2. native-lib : <br>
+2. native-lib : <br><br>
 C'est dans ce fichier que sont définis les appels à la JNI. On définit des fonctions en C++ qui pourront être appelées depuis le code Java. C'est ici que l'on instancie le CV_Manager et que l'on crée le thread pour la CameraLoop().
 
-3. Les librairies : <br>
+3. Les librairies : <br><br>
 Ce sont différents fichiers qui utilisent des librairies externes pour des opérations de traitement. L'encoder, par exemple, permet d'encoder les images enregistrées par la caméra.
 </p>
 
 <h1>Modifications du code donné:</h1>
 <h2>Renforcement du code :</h2>
-## Problème 
+<h3>Problème</h3>
 <p>
 Lors de l'installation de l'APK sur le téléphone de mathias, un bug jusque là jamais apparus s'est mis a survenir de manière aléatoire. Après avoir investigué le sujet, nous nous sommes rendu compte que certains téléphone alloue des zone de mémoire normalement interdite, engendrant la non réation d'objets C++ et donc des nullpointers par la suite.
 </p>
@@ -35,14 +35,16 @@ test = m_Encode->getStatus();
 ```
 
 <h4>Code mis à jours pour plus de robustesse</h4>
+
 ```c++
 do {
         m_Encode = new Encoder();
         m_Encode->setSocketClientH264(m_socket);
-        m_Encode->InitCodec(400, 608, 15, 20000); //480, 640, 15, 100000
+        m_Encode->InitCodec(400, 608, 15, 20000);
         test = m_Encode->getStatus();
 }while(test != AMEDIA_OK);    
 ```
+
 <p>De cette manière, le statut de l'encodeur doit forcément être AMEDIA_OK pour pouvoir passer à la suite.</p>
 <p>Cette partie nous a semblé essentiel, malgrés le besoins de cette evaluation, car cela permet a tout portable android de passer cette erreur, et non plus que les plus chanceux.</p>
 
@@ -51,9 +53,9 @@ do {
 pour éviter des erreur de segmentation lors du <code>memcpy</code> effectuer sur les buffers images. </p>
 <h4>Code précédent </h4>
 <p>précédemment nous utilisions le <code>SetUpEncoder</code> pour spécifier les dimensions des images</p>
-<code>
-m_Encode->InitCodec(400, 608, 15, 20000);
-</code>
+
+>> m_Encode->InitCodec(400, 608, 15, 20000);
+
 <h4>Mis à jours du code pour plus de maléabilité</h4>
 <p>Lors de la récupération des images, nous envoyons les dimanesions au serveur lors du premier envoi.
 C'est a ce moment là que nous initialisons les bonnes dimensions d'image à l'encodeur afin qu'il puisse encoder les images sans créer d'erreurs.</p>
