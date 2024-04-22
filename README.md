@@ -9,12 +9,12 @@
 Heureusement pour nous, cela ne se produisait que lors de l'initialisation de l'encodeur. Nous avons donc ajot une boucle initialisant l'encodeur 
 tant que celui-ci n'était pas créer entièrement. </p>
 <h4>Code précédent</h4>
-\```markdown    
+```
 m_Encode = new Encoder();
 m_Encode->setSocketClientH264(m_socket);
 m_Encode->InitCodec(400, 608, 15, 20000); //480, 640, 15, 100000
 test = m_Encode->getStatus();
-\```
+```
 <h4>Code mis à jours pour plus de robustesse</h4>
 <code>
 do {
