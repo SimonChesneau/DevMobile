@@ -1,3 +1,10 @@
+
+# Développement Mobile Avancé
+
+### Authors
+AJOUC Mathias
+CHESNEAU Simon
+
 <h1>Compréhension du code donné:</h1>
 <h2>Structure du code :</h2>
 <p>
@@ -19,7 +26,7 @@ Ce sont différents fichiers qui utilisent des librairies externes pour des opé
 <h2>Renforcement du code :</h2>
 <h3>Problème</h3>
 <p>
-Lors de l'installation de l'APK sur le téléphone de mathias, un bug jusque là jamais apparus s'est mis a survenir de manière aléatoire. Après avoir investigué le sujet, nous nous sommes rendu compte que certains téléphone alloue des zone de mémoire normalement interdite, engendrant la non réation d'objets C++ et donc des nullpointers par la suite.
+Lors de l'installation de l'application sur le téléphone de mathias, un bug jusque là jamais apparus s'est mis a survenir de manière aléatoire. Après avoir investigué le sujet, nous nous sommes rendu compte que certains téléphone alloue des zone de mémoire normalement interdite, engendrant la non réation d'objets C++ et donc des nullpointers par la suite.
 </p>
 
 <h3>Résolution</h3>
@@ -36,7 +43,7 @@ m_Encode->InitCodec(400, 608, 15, 20000);
 test = m_Encode->getStatus();
 ```
 
-<h4>Code mis à jours pour plus de robustesse</h4>
+<h4>Code mis à jours</h4>
 
 ```c++
 do {
@@ -55,26 +62,25 @@ Cette partie nous a semblée essentielle, malgrés le besoin de cette évaluatio
 <h3>Récupération automatique de la taille de l'image à l'initialisation de l'encodeur</h3>
 
 <p>
-Jusqu'ici, nous donnions manuelement les dimensions de l'image à l'encodeur afin qu'il puisse l'encoder. Nous avons décidé de rendre cette partie automatique pour éviter des erreurs de segmentation lors du <code>memcpy</code> effectué sur les buffers d'images. 
+Jusqu'ici, nous donnions manuellement les dimensions de l'image à l'encodeur. Nous avons décidé de rendre cette partie automatique pour éviter des erreurs de segmentation lors du <code>memcpy</code> effectué sur les buffers d'images. 
 </p>
 
-<h4>Code précédent </h4>
+<h4>Code précédent</h4>
 <p>Précédemment nous utilisions le <code>SetUpEncoder</code> pour spécifier les dimensions des images</p>
 
 ```c++ 
 m_Encode->InitCodec(400, 608, 15, 20000);
 ```
 
-<h4>Mis à jours du code pour plus de maléabilité</h4>
+<h4>Code mis à jours</h4>
 <p>
-Lors de la récupération des images, nous envoyons les dimanesions au serveur lors du premier envoi.
-C'est a ce moment là que nous initialisons les bonnes dimensions d'image à l'encodeur afin qu'il puisse encoder les images sans créer d'erreurs.
+Lors de la récupération de la première image, nous envoyons ses dimensions au serveur.
+C'est a ce moment que nous initialisons les bonnes dimensions d'image à l'encodeur afin qu'il puisse les encoder sans erreurs.
 </p>
 
 ```c++
 do {
-m_Encode->InitCodec(display_mat.rows, display_mat.cols, 15,
-                    20000);
+m_Encode->InitCodec(display_mat.rows, display_mat.cols, 15, 20000);
 
 m_retrievedImageWidth = display_mat.cols;
 m_retrievedImageHeight = display_mat.rows;
@@ -82,8 +88,9 @@ m_retrievedImageHeight = display_mat.rows;
 }while(m_Encode->getStatus() != AMEDIA_OK);
 ```
 
-<p>Cette partie nous a semblé essentiel, de la même manière que la première, car elle permet de pouvoir lancer le programme sur n'importe quel portable, en dépit des 
-dimensions d'images capturées</p>
+<p>
+Cette partie nous a semblé essentielle, de la même manière que la première, car elle permet de lancer le programme sur n'importe quel portable, peu importe le type de caméra utilisé et les dimensions de l'image capturé.
+</p>
 
 <h2>Ajout de nouvelles fonctionnalités</h2>
 <p>Le sujet de cette évaluation était d'ajouter de nouvelles fonctionnalités a l'application. Nous avons donc créer une détection de visages via 2 moyens.</p>
