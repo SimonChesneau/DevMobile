@@ -1,23 +1,23 @@
 <h1>Compréhension du code donné:</h1>
 <h2>Structure du code :</h2>
 <p>
-Le code s'organise autour de deux parties. Une partie écrite en Java nommée MainActivity permet de gérer le cycle de vie de l'application, les permissions et l'interface utilisateur. Et une partie native codée en C++ permet d'utiliser les composantes natives du téléphone (caméra) et des librairies C++ pour du traitement ou de la communication. Pour communiquer, ces deux parties utilisent une JNI ou Java-Native Interface qui permet de faire communiquer les deux langages.
+Le code s'organise autour de deux parties. Une partie écrite en Java nommée MainActivity permet de gérer le cycle de vie de l'application, les permissions et l'interface utilisateur. Et une partie native codée en C++ permet d'utiliser les composantes natives du téléphone (caméra) et des librairies C++ pour du traitement ou de la communication. Pour communiquer, ces deux parties utilisent une JNI ou Java-Native-Interface qui permet de faire communiquer les deux langages.
 
 Le plus gros du code fourni se trouve du côté natif et est structuré comme suit :
 
-1. CV_Manager :
+1. CV_Manager : <br>
 C'est la classe principale qui compose le code natif. Elle contient des méthodes qui permettent de faire appel aux fonctionnalités des librairies, comme par exemple SetUpCamera(), SetUpEncoder() ou encore CameraLoop().
 
-2. native-lib :
+2. native-lib : <br>
 C'est dans ce fichier que sont définis les appels à la JNI. On définit des fonctions en C++ qui pourront être appelées depuis le code Java. C'est ici que l'on instancie le CV_Manager et que l'on crée le thread pour la CameraLoop().
 
-3. Les librairies :
+3. Les librairies : <br>
 Ce sont différents fichiers qui utilisent des librairies externes pour des opérations de traitement. L'encoder, par exemple, permet d'encoder les images enregistrées par la caméra.
 </p>
 
 <h1>Modifications du code donné:</h1>
-<h2>Renforcement du code</h2>
-<h3>Problème</h3>
+<h2>Renforcement du code :</h2>
+## Problème 
 <p>
 Lors de l'installation de l'APK sur le téléphone de mathias, un bug jusque là jamais apparus s'est mis a survenir de manière aléatoire. Après avoir investigué le sujet, nous nous sommes rendu compte que certains téléphone alloue des zone de mémoire normalement interdite, engendrant la non réation d'objets C++ et donc des nullpointers par la suite.
 </p>
