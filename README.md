@@ -2,7 +2,7 @@
 # Développement Mobile Avancé
 
 ### Authors
-AJOUC Mathias
+AJOUC Mathias <br>
 CHESNEAU Simon
 
 <h1>Compréhension du code donné:</h1>
@@ -93,11 +93,13 @@ Cette partie nous a semblé essentielle, de la même manière que la première, 
 </p>
 
 <h2>Ajout de nouvelles fonctionnalités</h2>
-<p>Le sujet de cette évaluation était d'ajouter de nouvelles fonctionnalités a l'application. Nous avons donc créer une détection de visages via 2 moyens.</p>
-<p>La raison pour laquelle nous avons créé 2 manière de détecter les visages plutot que d'ajouter plusieurs fonctionnalités est simple: nous avons essayer dans un premier temps d'ajouter
-la détection de visages via openCV, mais après 2 jours d'essais infructueux, nous avons essayer la méthode par IA. A la suite de l'implémentation de la méthode de détection de visage par IA,
-nous avons réussi a implémenter la détéction de visages via openCV. Afin de ne pas gacher ces nombreuses heures a chercher comment implémenter ces détections de visages, nous avons choisis de 
-les implémenter toutes les 2 dans la version finale, avec un moyen de les activer et désactiver.</p>
+
+<p>
+Le sujet de cette évaluation était d'ajouter de nouvelles fonctionnalités a l'application. Nous avons donc décidé d'implémenter de la reconnaissance de forme et plus spécifiquement, la reconnaissance de visages. Pour ce faire, nous avons utilisé deux méthodes distinctes. 
+<br> <br>
+Nous avions initialement prévu de n'implémenter qu'une seule méthode pour la detection de visage et d'ajouter d'autres fonctionnalités. Cependant, après 2 jours d'essais infructueux avec la librairie OpenCV, nous nous sommes tournés vers une méthode basé sur de l'IA. Après de premiers essais concluant avec IA, et malgrès notre frustration, nous avons décidés de terminer l'implémentation de la librairie d'OpenCV dans le but de faire un comparatif de performance entre les techniques utilisées. 
+Les 2 implémentations sont disponibles dans la version finale, avec un moyen de les activer et désactiver.
+</p>
 
 <h3>Détéction de visages via une IA</h3>
 <p>La détéction de visage via une IA à été la première implémentation à avoir marchée. Cette implémentation, faite via le tutorial présent sur <a href="https://medium.com/analytics-vidhya/building-a-face-detector-with-opencv-in-c-8814cd374ea1">ce lien</a>.</p>
