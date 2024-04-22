@@ -49,7 +49,7 @@ do {
 
 <p>
 De cette manière, le statut de l'encodeur doit forcément être <code>AMEDIA_OK</code> pour pouvoir passer à la suite. <br>
-Cette partie nous a semblé essentiel, malgrés le besoins de cette evaluation, car cela permet a tout portable android de passer cette erreur, et non plus que les plus chanceux.
+Cette partie nous a semblée essentielle, malgrés le besoin de cette évaluation, car cela permet a tout portable android de passer cette erreur, et non uniquement les plus chanceux.
 </p>
 
 <h3>Récupération automatique de la taille de l'image à l'initialisation de l'encodeur</h3>
@@ -70,7 +70,8 @@ m_Encode->InitCodec(400, 608, 15, 20000);
 Lors de la récupération des images, nous envoyons les dimanesions au serveur lors du premier envoi.
 C'est a ce moment là que nous initialisons les bonnes dimensions d'image à l'encodeur afin qu'il puisse encoder les images sans créer d'erreurs.
 </p>
-<code>
+
+```c++
 do {
 m_Encode->InitCodec(display_mat.rows, display_mat.cols, 15,
                     20000);
@@ -79,7 +80,8 @@ m_retrievedImageWidth = display_mat.cols;
 m_retrievedImageHeight = display_mat.rows;
 
 }while(m_Encode->getStatus() != AMEDIA_OK);
-</code>
+```
+
 <p>Cette partie nous a semblé essentiel, de la même manière que la première, car elle permet de pouvoir lancer le programme sur n'importe quel portable, en dépit des 
 dimensions d'images capturées</p>
 
