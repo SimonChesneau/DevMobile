@@ -107,6 +107,8 @@ Les 2 implémentations sont disponibles dans la version finale, avec un moyen de
 <h4>Implémentation</h4>
 <p>Lors du lancement, il est possible de séléctionner l'option de détection de visage en utilisant de l'IA:</p>
 
+<img src="./IA.jpg" width="300">
+
 ![Image IA](./IA.jpg)
 
 <p>En selectionnant cette option, vous permettez que l'image passent par la méthode <code>AIFaceDetection</code> du <code>CV_Manager</code>.
