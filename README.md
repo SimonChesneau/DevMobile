@@ -10,11 +10,10 @@ Heureusement pour nous, cela ne se produisait que lors de l'initialisation de l'
 tant que celui-ci n'était pas créer entièrement. </p>
 <h4>Code précédent</h4>
 
-<code>
-```
+```c
 m_Encode = new Encoder();
 m_Encode->setSocketClientH264(m_socket);
-m_Encode->InitCodec(400, 608, 15, 20000); //480, 640, 15, 100000
+m_Encode->InitCodec(400, 608, 15, 20000);
 test = m_Encode->getStatus();
 ```
 
@@ -91,6 +90,3 @@ cette fonction utilisera les fichiers <code>deploy.prototxt</code> et <code>res1
 
 <h3>Ajout de petites décoration sur la caméra</h3>
 <p>Dans un but d'essayer de reproduire l'effet de caméra du jeu outlast, nous avons ajouter quelques petits traits sur l'image. Malheureusement, l'implémentation des détection de visages nous ayant pris trop de temps, nous n'avons pas été capable d'aller plus loins que les 4 coins de la caméra.</p>
-
-
-
